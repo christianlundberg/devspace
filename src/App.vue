@@ -1,23 +1,32 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
     <router-view/>
   </div>
 </template>
 
 <script>
+import { firebaseApp } from './firebase';
+import { mapGetters, mapMutations } from 'vuex';
+
 export default {
-  name: 'App'
-}
+  name: "App",
+  computed: mapGetters([
+    'user'
+  ]),
+  created: function() {
+    firebaseApp.auth().onAuthStateChanged(user => {
+      this.loadUser(user);
+
+      if(user)
+        this.$router.push({path: '/'});
+      else
+        this.$router.push({path: '/login'});
+    });
+  },
+  methods: mapMutations(['loadUser'])
+};
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+
 </style>
