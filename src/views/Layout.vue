@@ -12,6 +12,7 @@
           </div>
 
           <div class="md-toolbar-section-end">
+            {{user? user.email : ''}}
             <md-menu md-direction="bottom-start">
               <md-button md-menu-trigger class="md-icon-button">
                 <md-icon>more_vert</md-icon>
@@ -40,9 +41,9 @@
           </md-list-item>
 
           <md-list-item  tag="li" to="/" exact>
-          <md-icon>send</md-icon>
-                <span class="md-list-item-text">Sent Mail</span>
-              </md-list-item>
+            <md-icon>send</md-icon>
+            <span class="md-list-item-text">Sent Mail</span>
+          </md-list-item>
           
 
           <md-list-item>
@@ -65,19 +66,16 @@
         </md-list>
       </md-app-drawer>
 
-      <md-app-content>
-        <div class="md-layout">
-          <div class="md-layout-item md-size-15">hello</div>
-          <div class="md-layout-item">anna</div>
-          <div class="md-layout-item">I see it all</div>
-        </div>
+      <md-app-content >
+        <div class="container"><router-view></router-view></div>
+        
       </md-app-content>
     </md-app>
   </div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   name: "Layout",
@@ -87,18 +85,21 @@ export default {
       expandNews: false
     };
   },
+  computed: mapGetters(["user"]),
   methods: {
-    logout(){
-      this.$store.dispatch('logout');
+    logout() {
+      this.$store.dispatch("logout");
     }
   }
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 .md-app {
-  height: 100vh;
+  min-height:100vh;
+}
+.container {
+  min-height: calc(100vh - 96px);
 }
 .md-drawer {
   width: 230px;
