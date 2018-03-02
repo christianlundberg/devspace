@@ -41,7 +41,6 @@
 </template>
 
 <script>
-import { firebaseApp } from '../firebase';
 import { mapGetters } from 'vuex';
 import { required, email, minLength } from 'vuelidate/lib/validators';
 
