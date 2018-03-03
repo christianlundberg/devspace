@@ -1,6 +1,6 @@
 <template>
-    <div >
-        <space-list :spaces="spaces"></space-list>
+    <div>
+        <space-list :userSpaces="userSpaces" :spaces="spaces"></space-list>
     </div>
 </template>
 <script>
@@ -12,9 +12,15 @@ export default {
     components: {
         spaceList: SpaceList
     },
-    computed: mapGetters({
-        spaces: types.SPACES
-    }),
+    computed: {
+        userSpaces(){
+            return this.user ? this.user.spaces.map(space => space.data) : [];
+        },
+        ...mapGetters({
+            user: 'user',
+            spaces: types.SPACES
+        })
+    },
     created(){
         this.$store.dispatch(types.LOAD_SPACES);
     }

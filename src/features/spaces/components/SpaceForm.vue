@@ -41,19 +41,14 @@
                 <md-button :disabled="creating || $v.$invalid" @click="submit" class="md-raised md-primary">Create</md-button>
             </md-card-actions>
         </md-card>
-        <md-snackbar md-position="center" :md-duration="4000" :md-active.sync="showSnackbar" md-persistent>
-            <span>{{this.error ? this.error.message : ''}}</span>
-            <md-button class="md-primary md-raised" @click="showSnackbar = false">Ok</md-button>
-        </md-snackbar>
     </div>
   </form>
 </template>
 <script>
-import { mapGetters } from "vuex";
 import { required, email, minLength } from "vuelidate/lib/validators";
-import { types } from '../../../store/modules/spaces';
 
 export default {
+  props: ['creating'],
   data() {
     return {
       showSnackbar: false,
@@ -66,18 +61,9 @@ export default {
       }
     };
   },
-  computed: mapGetters({
-    creating: types.CREATING,
-    error: types.ERROR
-  }),
-  watch: {
-    error(value) {
-      this.showSnackbar = true;
-    }
-  },
   methods: {
     submit() {
-      this.$store.dispatch(types.CREATE_SPACE, this.form);
+      this.$emit('save', this.form);
     }
   },
   validations: {

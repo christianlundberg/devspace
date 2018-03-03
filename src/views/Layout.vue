@@ -30,20 +30,21 @@
 
       <md-app-drawer :md-active.sync="menuVisible" md-theme="secondary">
         <md-list>
-          <md-list-item>
-            <md-icon>move_to_inbox</md-icon>
-            <span class="md-list-item-text">Inbox</span>
+          <md-list-item @click="close" to="/manage">
+            <md-icon>devices_other</md-icon>
+            <span class="md-list-item-text">Manage spaces</span>
           </md-list-item>
-<md-divider></md-divider>
-          <md-list-item>
-            <md-icon>send</md-icon>
-            <span class="md-list-item-text">Sent Mail</span>
+          <md-divider></md-divider>
+          <md-list-item @click="close" to="/spaces/create">
+            <md-icon>note_add</md-icon>
+            <span class="md-list-item-text">Create space</span>
           </md-list-item>
-
-          <md-list-item  tag="li" to="/" exact>
-            <md-icon>send</md-icon>
-            <span class="md-list-item-text">Sent Mail</span>
+          <md-divider></md-divider>
+          <md-list-item @click="close" to="/spaces">
+            <md-icon>explore</md-icon>
+            <span class="md-list-item-text">Explore spaces</span>
           </md-list-item>
+          <md-divider></md-divider>
           
 
           <md-list-item>
@@ -67,8 +68,9 @@
       </md-app-drawer>
 
       <md-app-content >
-        <div class="container"><router-view></router-view></div>
-        
+        <div class="container">
+          <router-view></router-view>
+        </div>
       </md-app-content>
     </md-app>
   </div>
@@ -85,8 +87,11 @@ export default {
       expandNews: false
     };
   },
-  computed: mapGetters(["user"]),
+  computed: mapGetters(['user']),
   methods: {
+    close(){
+      this.menuVisible = false;
+    },
     logout() {
       this.$store.dispatch("logout");
     }
