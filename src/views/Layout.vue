@@ -93,7 +93,8 @@ export default {
       this.menuVisible = false;
     },
     logout() {
-      this.$store.dispatch("logout");
+      this.$store.dispatch("logout")
+        .then(() => this.$router.push({path: '/login'}));
     }
   }
 };

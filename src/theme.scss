@@ -7,8 +7,8 @@
   ));
 
 @include md-register-theme("default", (
-  primary: md-get-palette-color(pink, 600), 
-  accent: md-get-palette-color(blue, 500)
+  primary: #424242,
+  accent: md-get-palette-color(pink, 500)
 ));
 
 @import "~vue-material/dist/theme/all";

@@ -6,6 +6,8 @@ import SignUp from '@/views/SignUp';
 import Spaces from '@/features/spaces/views/Spaces';
 import CreateSpace from '@/features/spaces/views/CreateSpace';
 import ManageSpaces from '@/features/spaces/views/ManageSpaces';
+import Space from '@/features/spaces/views/Space';
+import CreatePost from '@/features/posts/views/CreatePost';
 
 Vue.use(Router)
 
@@ -13,7 +15,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/spaces',
+      redirect: '/manage',
       name: 'Layout',
       component: Layout,
       children: [{
@@ -25,6 +27,13 @@ export default new Router({
       },{
         path: 'spaces/create',
         component: CreateSpace
+      },{
+        path: 'spaces/:id',
+        component: Space
+      },{
+        name: 'createPost',
+        path: 'spaces/:id/post',
+        component: CreatePost
       }]
     },
     {

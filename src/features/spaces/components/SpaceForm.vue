@@ -2,7 +2,7 @@
   <form novalidate  class="md-layout md-alignment-center-center">
     <div class="md-layout-item md-size-50 md-small-size-75 md-xsmall-size-80 ">
         <md-card>
-            <md-progress-bar md-mode="indeterminate" v-if="creating" />
+            <md-progress-bar class="md-accent" md-mode="indeterminate" v-if="creating" />
             <md-card-header class="md-primary">
                 <div class="md-title">Create your own space:</div>
             </md-card-header>

@@ -2,7 +2,7 @@
   <form novalidate style="height: 100vh;"  class="md-layout md-alignment-center-center">
     <div class="md-layout-item md-size-33 md-small-size-50 md-xsmall-size-80 ">
         <md-card>
-            <md-progress-bar md-mode="indeterminate" v-if="loggingIn" />
+            <md-progress-bar class="md-accent" md-mode="indeterminate" v-if="loggingIn" />
             <md-card-header class="md-primary">
                 <div class="md-title">Login to your Devspace account</div>
             </md-card-header>
@@ -28,8 +28,16 @@
                 </div>
             </md-card-content>
             <md-card-actions>
-                <md-button to="/sign-up" >Sign up</md-button>
-                <md-button :disabled="loggingIn || $v.$invalid" @click="submit" class="md-raised md-primary">Login</md-button>
+                <div class="md-layout md-alignment-center-center">
+                    <div class="md-layout-item md-size-100 md-layout md-alignment-center-left">
+                        <md-button :disabled="loggingIn || $v.$invalid" @click="submit" class="md-raised md-primary">Login</md-button>
+                    </div>
+                    <br><br><br>
+                    <div class="md-layout md-layout-item md-size-100 md-alignment-center-right">
+                        <span>Don't have an account?</span>
+                        <md-button class="md-accent" to="/sign-up" >Sign up</md-button>
+                    </div>
+                </div>                
             </md-card-actions>
         </md-card>
         <md-snackbar md-position="center" :md-duration="4000" :md-active.sync="showSnackbar" md-persistent>
@@ -61,6 +69,7 @@ export default {
     methods: {
         submit(){
             this.$store.dispatch('login', {email: this.email, password: this.password})
+                .then(() => this.$router.push({path: '/spaces'}));
         }
     },
     validations: {
