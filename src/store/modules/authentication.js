@@ -82,6 +82,12 @@ const actions = {
     loadUser({ commit }, payload){
         commit('loadUser');
         return new Promise((resolve, reject) => {
+            if(!payload){
+                commit('loadUserSuccess', payload)
+                resolve();
+                return;
+            }
+
             firebaseApp.firestore().doc(`users/${payload.uid}`).get()
             .then(snapshot => {
                 const doc = snapshot.data();
@@ -96,19 +102,40 @@ const actions = {
     },
     login({ commit }, payload){
         commit('login');
-        firebaseApp.auth().signInWithEmailAndPassword(payload.email, payload.password)
-            .then(user => console.log(user))
-            .catch(error => commit('loginFail', error));
+        return new Promise((resolve, reject) => {
+            firebaseApp.auth().signInWithEmailAndPassword(payload.email, payload.password)
+                .then(user => resolve())
+                .catch(error => {
+                    commit('loginFail', error);
+                    reject();
+                });
+        });
     },
     logout({ commit }){
         commit('logout');
-        firebaseApp.auth().signOut()
-            .catch(error => commit('logoutFail', error));
+        return new Promise((resolve, reject) => {
+            firebaseApp.auth().signOut()
+                .then(() => {
+                    resolve()
+                })
+                .catch(error => {
+                    commit('logoutFail', error);
+                    reject(error);
+                });
+        });
+        
     },
     signUp({ commit }, payload){
         commit('signUp');
-        firebaseApp.auth().createUserWithEmailAndPassword(payload.email, payload.password)
-            .catch(error => commit('signUpFail', error));
+        return new Promise((resolve, reject) => {
+            firebaseApp.auth().createUserWithEmailAndPassword(payload.email, payload.password)
+                .then(() => resolve())
+                .catch(error => {
+                    commit('signUpFail', error);
+                    reject();
+                });
+        });
+        
     }
 };
 
