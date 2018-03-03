@@ -1,8 +1,17 @@
 import { firebaseApp } from '../../firebase';
+import 'firebase/firestore';
+
+export const types = {
+    CREATE_SPACE: 'authentication/CREATE_SPACE',
+    DELETE_SPACE: 'authentication/DELETE_SPACE',
+    DELETE_SPACE_SUCCESS: 'authentication/DELETE_SPACE_SUCCESS',
+    DELETE_SPACE_FAIL: 'authentication/DELETE_SPACE_FAIL'
+};
 
 const state = {
     user: null,
     error: null,
+    loading: false,
     loaded: false,
     creating: false,
     loggingIn: false,
@@ -11,6 +20,7 @@ const state = {
 
 const getters = {
     user: state => state.user,
+    loading: state => state.loading,
     error: state => state.error,
     loggingIn: state => state.loggingIn,
     creating: state => state.creating
@@ -38,20 +48,56 @@ const mutations = {
         state.error = payload;
         state.loggingOut = false;
     },
-    loadUser(state, payload){
+    loadUser(state){
+        state.loading = true;
+    },
+    loadUserSuccess(state, payload){
+        state.loading = true
         state.user = payload;
         state.error = null;
         state.loaded = true;
         state.creating = false;
         state.loggingIn = false;
         state.loggingOut = false;
+    },
+    loadUserFail(state, payload){
+        state.loading = false;
+        state.error = payload;
+    },
+    [types.CREATE_SPACE](state, payload){
+        state.user.spaces.push({data: payload, deleting: false});
+    },
+    [types.DELETE_SPACE](state, payload){
+        state.user.spaces.find(entity => entity.data.id == payload.id).deleting = true;
+    },
+    [types.DELETE_SPACE_SUCCESS](state, payload){
+        state.user.spaces = state.user.spaces.filter(entity => entity.data.id != payload.id);
+    },
+    [types.DELETE_SPACE_FAIL](state, payload){
+        state.user.spaces.find(entity => entity.data.id == payload.id).deleting = false;
     }
 };
 
 const actions = {
+    loadUser({ commit }, payload){
+        commit('loadUser');
+        return new Promise((resolve, reject) => {
+            firebaseApp.firestore().doc(`users/${payload.uid}`).get()
+            .then(snapshot => {
+                const doc = snapshot.data();
+                commit('loadUserSuccess', {email: payload.email, uid: payload.uid, spaces: ((doc && doc.spaces) || []).map(space => ({deleting: false, data: space}))});
+                resolve();
+            })
+            .catch(error => {
+                commit('loadUserFail', error);
+                reject();
+            });
+        });
+    },
     login({ commit }, payload){
         commit('login');
         firebaseApp.auth().signInWithEmailAndPassword(payload.email, payload.password)
+            .then(user => console.log(user))
             .catch(error => commit('loginFail', error));
     },
     logout({ commit }){
@@ -64,11 +110,6 @@ const actions = {
         firebaseApp.auth().createUserWithEmailAndPassword(payload.email, payload.password)
             .catch(error => commit('signUpFail', error));
     }
-};
-
-export const types = {
-    LOGIN: 'authentication/LOGIN',
-    LOAD_USER: 'authentication/LOAD_USER'
 };
 
 export default {
