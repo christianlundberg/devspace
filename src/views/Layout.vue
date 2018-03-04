@@ -44,24 +44,13 @@
             <md-icon>explore</md-icon>
             <span class="md-list-item-text">Explore spaces</span>
           </md-list-item>
-          <md-divider></md-divider>
-          
-
-          <md-list-item>
-            <md-icon>error</md-icon>
-            <span class="md-list-item-text">Spam</span>
-          </md-list-item>
-          <md-list-item md-expand :md-expanded.sync="expandNews">
+          <md-list-item v-if="user && user.spaces && user.spaces.length" md-expand :md-expanded.sync="expandNews">
             <md-icon>whatshot</md-icon>
-            <span class="md-list-item-text">News</span>
-
+            <span class="md-list-item-text">Spaces</span>
             <md-list slot="md-expand">
-              <md-list-item class="md-inset" to="/" exact>
-                Trash
+              <md-list-item @click="close" :to="{name: 'space', params: {id: space.data.id}}" class="md-inset" :key="space.id" v-for="space in user.spaces">
+                {{space.data.name}}
               </md-list-item>
-              <md-list-item class="md-inset">World</md-list-item>
-              <md-list-item class="md-inset">Europe</md-list-item>
-              <md-list-item class="md-inset">South America</md-list-item>
             </md-list>
           </md-list-item>
         </md-list>

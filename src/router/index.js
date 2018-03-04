@@ -8,6 +8,8 @@ import CreateSpace from '@/features/spaces/views/CreateSpace';
 import ManageSpaces from '@/features/spaces/views/ManageSpaces';
 import Space from '@/features/spaces/views/Space';
 import CreatePost from '@/features/posts/views/CreatePost';
+import Posts from '@/features/posts/views/Posts';
+import Post from '@/features/posts/views/Post';
 
 Vue.use(Router)
 
@@ -28,12 +30,20 @@ export default new Router({
         path: 'spaces/create',
         component: CreateSpace
       },{
+        name: 'space',
         path: 'spaces/:id',
-        component: Space
-      },{
-        name: 'createPost',
-        path: 'spaces/:id/post',
-        component: CreatePost
+        component: Space,
+        children: [{
+          path: '',
+          component: Posts
+        },{
+          path: 'posts/:postId',
+          component: Post
+        },{
+          name: 'createPost',
+          path: 'post',
+          component: CreatePost
+        }]
       }]
     },
     {
