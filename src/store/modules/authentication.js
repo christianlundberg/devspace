@@ -82,32 +82,34 @@ const actions = {
     loadUser({ commit }, payload){
         commit('loadUser');
         return new Promise((resolve, reject) => {
+            
             if(!payload){
-                commit('loadUserSuccess', payload)
+                commit('loadUserSuccess', payload);
                 resolve();
                 return;
             }
 
             firebaseApp.firestore().doc(`users/${payload.uid}`).get()
-            .then(snapshot => {
-                const doc = snapshot.data();
-                commit('loadUserSuccess', {email: payload.email, uid: payload.uid, spaces: ((doc && doc.spaces) || []).map(space => ({deleting: false, data: space}))});
-                resolve();
-            })
-            .catch(error => {
-                commit('loadUserFail', error);
-                reject();
-            });
+                .then(snapshot => {
+                    const doc = snapshot.data();
+                    commit('loadUserSuccess', {email: payload.email, uid: payload.uid, spaces: ((doc && doc.spaces) || []).map(space => ({deleting: false, data: space}))});
+                    resolve();
+                })
+                .catch(error => {
+                    commit('loadUserFail', error);
+                    reject();
+                });
         });
     },
-    login({ commit }, payload){
+    login({ commit, dispatch }, payload){
         commit('login');
         return new Promise((resolve, reject) => {
             firebaseApp.auth().signInWithEmailAndPassword(payload.email, payload.password)
-                .then(user => resolve())
+                .then(user => dispatch('loadUser', user))
+                .then(() => resolve())
                 .catch(error => {
                     commit('loginFail', error);
-                    reject();
+                    reject(error);
                 });
         });
     },
@@ -116,7 +118,8 @@ const actions = {
         return new Promise((resolve, reject) => {
             firebaseApp.auth().signOut()
                 .then(() => {
-                    resolve()
+                    commit('loadUserSuccess', null);
+                    resolve();
                 })
                 .catch(error => {
                     commit('logoutFail', error);
@@ -129,7 +132,10 @@ const actions = {
         commit('signUp');
         return new Promise((resolve, reject) => {
             firebaseApp.auth().createUserWithEmailAndPassword(payload.email, payload.password)
-                .then(() => resolve())
+                .then(user => {
+                    commit('loadUserSuccess', {uid: user.uid, email: user.email, spaces: []})
+                    resolve();
+                })
                 .catch(error => {
                     commit('signUpFail', error);
                     reject();

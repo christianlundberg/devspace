@@ -8,6 +8,11 @@
     </md-card>
     <md-card v-else>
         <md-card-content>
+            <md-empty-state 
+                v-if="!(posts && posts.length)"
+                md-icon="notifications_off"
+                md-label="Looks like this space is empty">
+            </md-empty-state>
             <post-list :posts="posts"></post-list>
         </md-card-content>
     </md-card>

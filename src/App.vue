@@ -14,14 +14,14 @@ export default {
     'user'
   ]),
   created: function() {
-    firebaseApp.auth().onAuthStateChanged(user => {
-      //this.loadUser(user);
-      this.$store.dispatch('loadUser', user);
-      if(user)
-        this.$router.push({path: '/'});
-      else
-        this.$router.push({path: '/login'});
-    });
+    // firebaseApp.auth().onAuthStateChanged(user => {
+    //   //this.loadUser(user);
+    //   this.$store.dispatch('loadUser', user);
+    //   if(user)
+    //     this.$router.push({path: '/'});
+    //   else
+    //     this.$router.push({path: '/login'});
+    // });
   },
   methods: mapMutations(['loadUser'])
 };

@@ -8,17 +8,24 @@ import VueMaterial from 'vue-material';
 import Vuelidate from 'vuelidate';
 import 'vue-material/dist/vue-material.min.css';
 import './theme.scss';
-
+import { firebaseApp } from './firebase';
 
 Vue.config.productionTip = false;
 
 Vue.use(VueMaterial);
 Vue.use(Vuelidate);
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  store,
-  components: { App },
-  template: '<App/>'
-})
+
+const unsubscribe = firebaseApp.auth().onAuthStateChanged(user => {
+
+  store.dispatch('loadUser', user).then(() => {
+    new Vue({
+      el: '#app',
+      router,
+      store,
+      components: { App },
+      template: '<App/>'
+    });
+  });
+  
+  unsubscribe();
+});
