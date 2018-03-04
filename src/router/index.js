@@ -10,16 +10,18 @@ import Space from '@/features/spaces/views/Space';
 import CreatePost from '@/features/posts/views/CreatePost';
 import Posts from '@/features/posts/views/Posts';
 import Post from '@/features/posts/views/Post';
+import { store } from '../store';
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
       redirect: '/manage',
       name: 'Layout',
       component: Layout,
+      meta: { requiresAuth: true },
       children: [{
         path: 'manage',
         component: ManageSpaces
@@ -57,4 +59,20 @@ export default new Router({
       component: SignUp
     }
   ]
-})
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!store.getters.user) {
+      next({
+        path: '/login'
+      });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
+});
+
+export default router;
