@@ -1,7 +1,7 @@
 <template>
   <form novalidate  class="md-layout">
     <div class="md-layout-item md-size-100">
-        <h4>Here you write our your own post.</h4>
+        <h4>Here you can write out your own post.</h4>
     </div>
     <div class="md-layout-item md-size-100">
         <md-field :class="{'md-invalid': $v.form.title.$error}">
@@ -18,7 +18,8 @@
         </md-field>
     </div>
     <div class="md-layout-item md-size-100">
-        <md-button @click="submit" :disabled="creating || $v.$invalid" class="md-primary md-raised">Save</md-button>
+        <md-button @click="submit" :disabled="posting || $v.$invalid" class="md-primary md-raised">Save</md-button>
+        <md-button :to="`/spaces/${this.$route.params.id}`">Cancel</md-button>
     </div>
   </form>
 </template>
@@ -27,6 +28,7 @@
 import { required, url } from "vuelidate/lib/validators";
 
 export default {
+  props: ['posting'],
   data() {
     return {
       form: {

@@ -19,7 +19,8 @@
         </md-field>
     </div>
     <div class="md-layout-item md-size-100">
-        <md-button @click="submit" :disabled="creating || $v.$invalid" class="md-primary md-raised">Save</md-button>
+        <md-button @click="submit" :disabled="posting || $v.$invalid" class="md-primary md-raised">Save</md-button>
+        <md-button :to="`/spaces/${this.$route.params.id}`">Cancel</md-button>
     </div>
   </form>
 </template>
@@ -28,7 +29,7 @@
 import { required, url } from 'vuelidate/lib/validators';
 
 export default {
-    props: ['creating'],
+    props: ['posting'],
     data(){
         return {
             form: {
