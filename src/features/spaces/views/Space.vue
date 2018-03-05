@@ -1,9 +1,9 @@
 <template>
   <div class="md-layout">
-    <div class="md-layout-item md-size-70">
+    <div class="md-layout-item md-xsmall-size-50 md-small-size-60 md-size-70">
       <router-view></router-view>
     </div>
-    <div class="md-layout-item md-size-30">
+    <div class="md-layout-item md-xsmall-size-50 md-small-size-40 md-size-30">
       <md-card v-if="loading">
         <md-card-content>
           <div class="md-layout md-alignment-center-center">
@@ -74,3 +74,4 @@ export default {
   }
 }
 </script>
+

@@ -5,6 +5,6 @@ export const firebaseApp = firebase.initializeApp({
   authDomain: "devspace-5b744.firebaseapp.com",
   databaseURL: "https://devspace-5b744.firebaseio.com",
   projectId: "devspace-5b744",
-  storageBucket: "",
+  storageBucket: "gs://devspace-5b744.appspot.com",
   messagingSenderId: "847931420061"
 });

@@ -48,7 +48,7 @@
             <md-icon>whatshot</md-icon>
             <span class="md-list-item-text">Spaces</span>
             <md-list slot="md-expand">
-              <md-list-item @click="close" :to="{name: 'space', params: {id: space.data.id}}" class="md-inset" :key="space.id" v-for="space in user.spaces">
+              <md-list-item @click="close" :to="`/spaces/${space.data.id}`" class="md-inset" :key="space.id" v-for="space in user.spaces">
                 {{space.data.name}}
               </md-list-item>
             </md-list>

@@ -1,6 +1,6 @@
 <template>
   <form novalidate style="height: 100vh;"  class="md-layout md-alignment-center-center">
-    <div class="md-layout-item md-size-33 md-small-size-50 md-xsmall-size-80 ">
+    <div class="md-layout-item md-size-40 md-small-size-60 md-xsmall-size-80 ">
         <md-card>
             <md-progress-bar class="md-accent" md-mode="indeterminate" v-if="loggingIn" />
             <md-card-header class="md-primary">

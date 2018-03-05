@@ -1,6 +1,7 @@
 import { firebaseApp } from '../../firebase';
 import 'firebase/firestore';
 import { types as authenticationTypes } from './authentication';
+import uuid from 'uuid/v4';
 
 export const types = {
     SPACES: 'spaces/ENTITIES',
@@ -86,15 +87,20 @@ const actions = {
     [types.CREATE_SPACE] : ({ commit, rootState }, payload) => {
         commit(types.CREATE_SPACE);
         return new Promise((resolve, reject) => {
-            firebaseApp.firestore().collection('spaces').add({...payload, userId: rootState.authentication.user.uid})
+            let space;
+            firebaseApp.storage().ref(`${uuid()}/${payload.logo.name}`).put(payload.logo)
+                .then(fileData => {
+                    space = {...payload, logo: fileData.downloadURL, userId: rootState.authentication.user.uid};
+                    return firebaseApp.firestore().collection('spaces').add(space)
+                })
                 .then((doc) => {
                     commit(types.CREATE_SPACE_SUCCESS);
-                    commit(authenticationTypes.CREATE_SPACE, {...payload, id: doc.id, userId: rootState.authentication.user.uid})
+                    commit(authenticationTypes.CREATE_SPACE, space)
                     resolve();
                 })
                 .catch(error => {
                     commit(types.CREATE_SPACE_FAIL, error);
-                    reject();
+                    reject(error);
                 });
         });
     },

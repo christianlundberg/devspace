@@ -17,9 +17,10 @@
                       </md-field>
                     </div>
                     <div class="md-layout-item md-size-50">
-                      <md-field>
-                        <label for="logo">Logo (url)</label>
-                        <md-input v-model="form.logo" id="logo"/>
+                      <md-field :class="{'md-invalid': $v.form.logo.$error}">
+                        <label>Upload logo</label>
+                        <md-file @md-change="onChange" accept="image/*"/>
+                        <span class="md-error" v-if="!$v.form.logo.required">The logo is required</span>
                       </md-field>
                     </div>
                     <div class="md-layout-item md-size-100">
@@ -54,7 +55,7 @@ export default {
       showSnackbar: false,
       form: {
         name: '',
-        logo: '',
+        logo: null,
         description: '',
         chat: false,
         tags: []
@@ -62,6 +63,11 @@ export default {
     };
   },
   methods: {
+    onChange(fileList){
+      this.$v.form.logo.$touch();
+      const file = fileList[0];
+      this.form.logo = file;
+    },
     submit() {
       this.$emit('save', this.form);
     }
@@ -69,6 +75,9 @@ export default {
   validations: {
     form: {
       name: {
+        required
+      },
+      logo: {
         required
       },
       description: {

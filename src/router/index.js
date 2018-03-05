@@ -32,11 +32,11 @@ const router = new Router({
         path: 'spaces/create',
         component: CreateSpace
       },{
-        name: 'space',
         path: 'spaces/:id',
         component: Space,
         children: [{
           path: '',
+          name: 'space',
           component: Posts
         },{
           path: 'posts/:postId',
@@ -51,11 +51,13 @@ const router = new Router({
     {
       path: '/login',
       name: 'Login',
+      meta: { requiresNotAuth: true },
       component: Login
     },
     {
       path: '/sign-up',
       name: 'SignUp',
+      meta: { requiresNotAuth: true },
       component: SignUp
     }
   ]
@@ -66,6 +68,14 @@ router.beforeEach((to, from, next) => {
     if (!store.getters.user) {
       next({
         path: '/login'
+      });
+    } else {
+      next();
+    }
+  } else if (to.matched.some(record => record.meta.requiresNotAuth)) {
+    if (store.getters.user) {
+      next({
+        path: '/'
       });
     } else {
       next();
